@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.9.1",
-    "@vercel/postgres": "^0.10.0",
+    "@neondatabase/serverless": "^1.0.1",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.44.2",
     "next": "15.3.3",
