@@ -6,10 +6,14 @@ import { useSession } from "next-auth/react"; // or your session hook
 
 export default function UsernameCheck() {
   const pathname = usePathname();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   useEffect(() => {
-    if (!session?.user?.username && pathname !== "/new") {
+    if (
+      status === "authenticated" &&
+      !session?.user?.username &&
+      pathname !== "/new"
+    ) {
       window.location.href = "/new";
     }
   }, [session, pathname]);
