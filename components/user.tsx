@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import { ReactElement } from "react";
 import { auth } from "@/auth";
 
