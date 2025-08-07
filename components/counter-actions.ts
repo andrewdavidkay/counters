@@ -15,12 +15,9 @@ export async function createCounter(formData: FormData) {
     throw new Error("Name is required");
   }
 
-  const [counter] = await db
-    .insert(countersTable)
-    .values({
-      id: crypto.randomUUID(),
-      name,
-      userId: session.user.id,
-    })
-    .returning();
+  await db.insert(countersTable).values({
+    id: crypto.randomUUID(),
+    name,
+    userId: session.user.id,
+  });
 }
