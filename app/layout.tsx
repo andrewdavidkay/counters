@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import UsernameCheck from "@/components/username-check";
 import { SessionProvider } from "next-auth/react"; // or "@auth/next/client" for Auth.js v5
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +32,9 @@ export default function RootLayout({
       >
         <SessionProvider>
           <UsernameCheck />
+          <header>
+            <Link href="/">Counters</Link>
+          </header>
           {children}
         </SessionProvider>
       </body>
