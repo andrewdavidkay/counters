@@ -4,13 +4,13 @@ import { usersTable, countersTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 interface ProfilePageProps {
-  params: {
+  params: Promise<{
     username: string;
-  };
+  }>;
 }
 
 export default async function Profile({ params }: ProfilePageProps) {
-  const { username } = params;
+  const { username } = await params;
 
   // Get user by username
   const [user] = await db
