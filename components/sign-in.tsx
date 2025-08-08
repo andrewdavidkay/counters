@@ -5,10 +5,15 @@ export default function SignIn() {
     <form
       action={async () => {
         "use server";
-        await signIn("google");
+        await signIn("twitter");
       }}
     >
-      <button type="submit">Signin with Google</button>
+      <button
+        type="submit"
+        className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors"
+      >
+        Sign in with X
+      </button>
     </form>
   );
 }

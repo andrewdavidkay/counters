@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import UsernameCheck from "@/components/username-check";
 import { SessionProvider } from "next-auth/react"; // or "@auth/next/client" for Auth.js v5
 import Link from "next/link";
 import { auth } from "@/auth";
@@ -36,7 +35,6 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SessionProvider>
-          <UsernameCheck />
           <header className="border-b">
             <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
               <Link href="/" className="font-semibold">
