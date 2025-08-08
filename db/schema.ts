@@ -59,4 +59,9 @@ export const countersTable = pgTable("counter", {
     .references(() => usersTable.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   value: integer("value").notNull().default(0),
+  createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt", { mode: "date" })
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
 });
