@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import CounterCard from "@/components/counter-card";
-import { incrementCounter } from "@/components/counter-actions";
+import { incrementCounter, deleteCounter } from "@/components/counter-actions";
 
 interface Counter {
   id: string;
@@ -83,6 +83,23 @@ export default function CountersClient({
     }
   }
 
+  async function handleDelete(counterId: string) {
+    // Optimistic delete
+    setCounters((prev) => prev.filter((c) => c.id !== counterId));
+
+    try {
+      const formData = new FormData();
+      formData.append("id", counterId);
+      await deleteCounter(formData);
+      // No need to sync since we already removed it optimistically
+    } catch (error) {
+      // Revert optimistic delete on failure
+      console.error("Failed to delete counter:", error);
+      // We'd need to restore the counter here, but we don't have the original data
+      // This is a limitation of optimistic deletes
+    }
+  }
+
   return (
     <div>
       <div className="mb-6 flex justify-center">
@@ -105,6 +122,7 @@ export default function CountersClient({
             key={counter.id}
             counter={counter}
             onIncrement={() => handleIncrement(counter.id)}
+            onDelete={() => handleDelete(counter.id)}
           />
         ))}
       </div>

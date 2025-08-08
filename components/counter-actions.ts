@@ -49,3 +49,21 @@ export async function incrementCounter(formData: FormData) {
 
   return counter;
 }
+
+export async function deleteCounter(formData: FormData) {
+  const session = await auth();
+  if (!session?.user?.id) {
+    throw new Error("Not authenticated");
+  }
+
+  const id = formData.get("id");
+  if (typeof id !== "string" || id.length === 0) {
+    throw new Error("Counter id is required");
+  }
+
+  await db
+    .delete(countersTable)
+    .where(
+      and(eq(countersTable.id, id), eq(countersTable.userId, session.user.id))
+    );
+}
