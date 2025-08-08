@@ -9,12 +9,14 @@ interface Counter {
 interface CounterCardProps {
   counter: Counter;
   onIncrement: () => void;
+  onDecrement: () => void;
   onDelete: () => void;
 }
 
 export default function CounterCard({
   counter,
   onIncrement,
+  onDecrement,
   onDelete,
 }: CounterCardProps) {
   return (
@@ -28,6 +30,13 @@ export default function CounterCard({
             aria-label={`Increment ${counter.name}`}
           >
             +
+          </button>
+          <button
+            onClick={onDecrement}
+            className="w-8 h-8 rounded-full bg-gray-600 text-white flex items-center justify-center hover:bg-gray-700 transition-colors"
+            aria-label={`Decrement ${counter.name}`}
+          >
+            −
           </button>
           <button
             onClick={onDelete}

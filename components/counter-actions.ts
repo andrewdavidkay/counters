@@ -50,6 +50,28 @@ export async function incrementCounter(formData: FormData) {
   return counter;
 }
 
+export async function decrementCounter(formData: FormData) {
+  const session = await auth();
+  if (!session?.user?.id) {
+    throw new Error("Not authenticated");
+  }
+
+  const id = formData.get("id");
+  if (typeof id !== "string" || id.length === 0) {
+    throw new Error("Counter id is required");
+  }
+
+  const [counter] = await db
+    .update(countersTable)
+    .set({ value: sql`${countersTable.value} - 1` })
+    .where(
+      and(eq(countersTable.id, id), eq(countersTable.userId, session.user.id))
+    )
+    .returning();
+
+  return counter;
+}
+
 export async function deleteCounter(formData: FormData) {
   const session = await auth();
   if (!session?.user?.id) {

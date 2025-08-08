@@ -2,7 +2,11 @@
 
 import { useRef, useState } from "react";
 import CounterCard from "@/components/counter-card";
-import { incrementCounter, deleteCounter } from "@/components/counter-actions";
+import {
+  incrementCounter,
+  decrementCounter,
+  deleteCounter,
+} from "@/components/counter-actions";
 
 interface Counter {
   id: string;
@@ -83,6 +87,29 @@ export default function CountersClient({
     }
   }
 
+  async function handleDecrement(counterId: string) {
+    // Optimistic decrement
+    setCounters((prev) =>
+      prev.map((c) => (c.id === counterId ? { ...c, value: c.value - 1 } : c))
+    );
+
+    try {
+      const formData = new FormData();
+      formData.append("id", counterId);
+      const realCounter = await decrementCounter(formData);
+      // Sync with server value
+      setCounters((prev) =>
+        prev.map((c) => (c.id === counterId ? realCounter : c))
+      );
+    } catch (error) {
+      // Rollback on failure
+      setCounters((prev) =>
+        prev.map((c) => (c.id === counterId ? { ...c, value: c.value + 1 } : c))
+      );
+      console.error("Failed to decrement counter:", error);
+    }
+  }
+
   async function handleDelete(counterId: string) {
     // Optimistic delete
     setCounters((prev) => prev.filter((c) => c.id !== counterId));
@@ -122,6 +149,7 @@ export default function CountersClient({
             key={counter.id}
             counter={counter}
             onIncrement={() => handleIncrement(counter.id)}
+            onDecrement={() => handleDecrement(counter.id)}
             onDelete={() => handleDelete(counter.id)}
           />
         ))}
