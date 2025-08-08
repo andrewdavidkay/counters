@@ -16,16 +16,11 @@ export async function createCounter(formData: FormData) {
     throw new Error("Name is required");
   }
 
-  const [counter] = await db
-    .insert(countersTable)
-    .values({
-      id: crypto.randomUUID(),
-      name,
-      userId: session.user.id,
-    })
-    .returning();
-
-  return counter;
+  await db.insert(countersTable).values({
+    id: crypto.randomUUID(),
+    name,
+    userId: session.user.id,
+  });
 }
 
 export async function incrementCounter(formData: FormData) {
@@ -39,15 +34,12 @@ export async function incrementCounter(formData: FormData) {
     throw new Error("Counter id is required");
   }
 
-  const [counter] = await db
+  await db
     .update(countersTable)
     .set({ value: sql`${countersTable.value} + 1` })
     .where(
       and(eq(countersTable.id, id), eq(countersTable.userId, session.user.id))
-    )
-    .returning();
-
-  return counter;
+    );
 }
 
 export async function decrementCounter(formData: FormData) {
@@ -61,15 +53,12 @@ export async function decrementCounter(formData: FormData) {
     throw new Error("Counter id is required");
   }
 
-  const [counter] = await db
+  await db
     .update(countersTable)
     .set({ value: sql`${countersTable.value} - 1` })
     .where(
       and(eq(countersTable.id, id), eq(countersTable.userId, session.user.id))
-    )
-    .returning();
-
-  return counter;
+    );
 }
 
 export async function deleteCounter(formData: FormData) {

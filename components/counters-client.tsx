@@ -73,11 +73,8 @@ export default function CountersClient({
     try {
       const formData = new FormData();
       formData.append("id", counterId);
-      const realCounter = await incrementCounter(formData);
-      // Sync with server value
-      setCounters((prev) =>
-        prev.map((c) => (c.id === counterId ? realCounter : c))
-      );
+      await incrementCounter(formData);
+      // No need to sync since we already updated optimistically
     } catch (error) {
       // Rollback on failure
       setCounters((prev) =>
@@ -96,11 +93,8 @@ export default function CountersClient({
     try {
       const formData = new FormData();
       formData.append("id", counterId);
-      const realCounter = await decrementCounter(formData);
-      // Sync with server value
-      setCounters((prev) =>
-        prev.map((c) => (c.id === counterId ? realCounter : c))
-      );
+      await decrementCounter(formData);
+      // No need to sync since we already updated optimistically
     } catch (error) {
       // Rollback on failure
       setCounters((prev) =>
