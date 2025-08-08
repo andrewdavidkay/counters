@@ -4,6 +4,9 @@ import "./globals.css";
 import UsernameCheck from "@/components/username-check";
 import { SessionProvider } from "next-auth/react"; // or "@auth/next/client" for Auth.js v5
 import Link from "next/link";
+import { auth } from "@/auth";
+import SignIn from "@/components/sign-in";
+import SignOut from "@/components/sign-out";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,11 +23,13 @@ export const metadata: Metadata = {
   description: "a place to count things",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
   return (
     <html lang="en">
       <body
@@ -32,8 +37,13 @@ export default function RootLayout({
       >
         <SessionProvider>
           <UsernameCheck />
-          <header>
-            <Link href="/">Counters</Link>
+          <header className="border-b">
+            <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+              <Link href="/" className="font-semibold">
+                Counters
+              </Link>
+              <div>{session?.user ? <SignOut /> : <SignIn />}</div>
+            </div>
           </header>
           {children}
         </SessionProvider>
