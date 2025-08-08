@@ -42,7 +42,24 @@ export default async function RootLayout({
               <Link href="/" className="font-semibold">
                 Counters
               </Link>
-              <div>{session?.user ? <SignOut /> : <SignIn />}</div>
+              <div className="flex items-center gap-3">
+                {session?.user ? (
+                  <>
+                    <Link href={`/${session.user.username}`}>
+                      <img
+                        src={session.user.image ?? "/default-avatar.png"}
+                        alt={`${
+                          session.user.name || session.user.username
+                        }'s avatar`}
+                        className="w-8 h-8 rounded-full border-2 border-gray-200 hover:border-gray-300 transition-colors"
+                      />
+                    </Link>
+                    <SignOut />
+                  </>
+                ) : (
+                  <SignIn />
+                )}
+              </div>
             </div>
           </header>
           {children}
