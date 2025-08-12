@@ -12,14 +12,6 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* Force light mode for consistent appearance */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #ffffff;
-    --foreground: #171717;
-  }
-}
-
 html {
   background: #ffffff;
 }
