@@ -36,7 +36,20 @@ export default async function RootLayout({
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        style={{ background: "red !important" }}
       >
+        {/* Temporary debug - remove this later */}
+        <div
+          style={{
+            background: "yellow",
+            padding: "10px",
+            textAlign: "center",
+            fontSize: "20px",
+            fontWeight: "bold",
+          }}
+        >
+          DEBUG: If you see this yellow bar, CSS is loading
+        </div>
         <SessionProvider>
           <header className="border border-slate-300">
             <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
