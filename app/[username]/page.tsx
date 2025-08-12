@@ -37,11 +37,11 @@ export default async function Profile({ params }: ProfilePageProps) {
         <p className="text-gray-600">@{user.username}</p>
       </div>
 
-      <div className="bg-white rounded-lg shadow-md border border-slate-300 overflow-hidden">
+      <div className=" overflow-hidden">
         {counters.map((counter) => (
           <div
             key={counter.id}
-            className="flex items-center justify-between p-4 border-b last:border-b-0 hover:bg-gray-50 transition-colors"
+            className="flex items-center justify-between p-4 mb-2 bg-white rounded-lg border border-slate-300"
           >
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-gray-900">
