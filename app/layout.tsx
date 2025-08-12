@@ -55,7 +55,7 @@ export default async function RootLayout({
                     <SignOut />
                   </>
                 ) : (
-                  <SignIn />
+                  <SignIn size="small" />
                 )}
               </div>
             </div>

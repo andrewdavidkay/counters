@@ -15,7 +15,7 @@ export default async function Home() {
           Track what matters to you
         </h1>
         <div className="flex justify-center">
-          <SignIn />
+          <SignIn size="large" />
         </div>
       </div>
     );
