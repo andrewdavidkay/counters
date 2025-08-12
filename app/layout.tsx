@@ -35,7 +35,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SessionProvider>
-          <header className="border-b">
+          <header className="border border-slate-300">
             <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
               <Link href="/" className="font-semibold">
                 Counters
@@ -49,7 +49,7 @@ export default async function RootLayout({
                         alt={`${
                           session.user.name || session.user.username
                         }'s avatar`}
-                        className="w-8 h-8 rounded-full border-2 border-gray-200 hover:border-gray-300 transition-colors"
+                        className="w-8 h-8 rounded-full"
                       />
                     </Link>
                     <SignOut />
