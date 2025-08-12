@@ -21,11 +21,16 @@ const config: NextAuthConfig = {
         const username =
           twitterProfile.data?.username || twitterProfile.screen_name;
 
+        const full400Url = twitterProfile.data?.profile_image_url.replace(
+          "_normal",
+          "_400x400"
+        );
+
         if (username) {
           // Update the user's username in the database
           await db
             .update(usersTable)
-            .set({ username })
+            .set({ username, image: full400Url })
             .where(eq(usersTable.id, user.id));
         }
       }

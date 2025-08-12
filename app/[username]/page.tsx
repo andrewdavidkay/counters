@@ -30,11 +30,18 @@ export default async function Profile({ params }: ProfilePageProps) {
 
   return (
     <div className="max-w-2xl mx-auto p-6">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">
-          {user.name || user.username}
-        </h1>
-        <p className="text-gray-600">@{user.username}</p>
+      <div className="mb-8 flex items-center gap-4">
+        <img
+          src={user.image ?? "/default-avatar.png"}
+          alt={`${user.name || user.username}'s avatar`}
+          className="w-16 h-16 rounded-full"
+        />
+        <div>
+          <h1 className="text-3xl font-bold mb-2">
+            {user.name || user.username}
+          </h1>
+          <p className="text-gray-600">@{user.username}</p>
+        </div>
       </div>
 
       <div className=" overflow-hidden">
