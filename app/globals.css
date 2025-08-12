@@ -23,49 +23,6 @@ body {
   min-height: 100vh;
 }
 
-/* Safari-specific overrides */
-@supports (-webkit-touch-callout: none) {
-  html {
-    background: #ffffff !important;
-    color-scheme: light !important;
-  }
-
-  body {
-    background: #ffffff !important;
-    color: #171717 !important;
-  }
-
-  * {
-    color-scheme: light !important;
-  }
-}
-
-/* Brave/Chrome mobile overrides */
-@media (prefers-color-scheme: dark) {
-  html {
-    background: #ffffff !important;
-    color-scheme: light !important;
-  }
-
-  body {
-    background: #ffffff !important;
-    color: #171717 !important;
-  }
-
-  * {
-    color-scheme: light !important;
-  }
-}
-
-/* Force light mode for all browsers */
-html {
-  color-scheme: light !important;
-}
-
-body {
-  color-scheme: light !important;
-}
-
 /* Fix for iOS Safari button background bleeding */
 button {
   -webkit-appearance: none;
