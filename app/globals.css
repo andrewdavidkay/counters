@@ -23,6 +23,23 @@ body {
   min-height: 100vh;
 }
 
+/* Safari-specific overrides */
+@supports (-webkit-touch-callout: none) {
+  html {
+    background: #ffffff !important;
+    color-scheme: light !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #171717 !important;
+  }
+
+  * {
+    color-scheme: light !important;
+  }
+}
+
 /* Fix for iOS Safari button background bleeding */
 button {
   -webkit-appearance: none;

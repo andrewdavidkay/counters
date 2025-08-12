@@ -30,17 +30,15 @@ export default async function RootLayout({
   const session = await auth();
 
   return (
-    <html lang="en" style={{ colorScheme: "light", background: "#ffffff" }}>
+    <html lang="en">
       <head>
         <meta name="color-scheme" content="light" />
+        <meta name="supported-color-schemes" content="light" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        style={{
-          background: "#ffffff !important",
-          color: "#171717 !important",
-          minHeight: "100vh",
-        }}
       >
         <SessionProvider>
           <header className="border border-slate-300">
