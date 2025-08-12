@@ -11,7 +11,9 @@ export default async function Home() {
   if (!session?.user?.id) {
     return (
       <div className="max-w-3xl mx-auto p-6">
-        <h1 className="text-2xl font-semibold mb-4 text-center">Welcome</h1>
+        <h1 className="text-4xl font-bold mb-6 text-center">
+          Track what matters to you
+        </h1>
         <div className="flex justify-center">
           <SignIn />
         </div>
