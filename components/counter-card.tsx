@@ -12,7 +12,6 @@ interface CounterCardProps {
   counter: Counter;
   onIncrement: () => void;
   onDecrement: () => void;
-  onDelete: () => void;
   onCustomValue: (value: number) => void;
 }
 
@@ -20,7 +19,6 @@ export default function CounterCard({
   counter,
   onIncrement,
   onDecrement,
-  onDelete,
   onCustomValue,
 }: CounterCardProps) {
   const [customValue, setCustomValue] = useState("");
@@ -81,13 +79,6 @@ export default function CounterCard({
             title="Add custom value"
           >
             ±
-          </button>
-          <button
-            onClick={onDelete}
-            className="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center hover:bg-red-700 transition-colors"
-            aria-label={`Delete ${counter.name}`}
-          >
-            ×
           </button>
         </div>
       </div>
