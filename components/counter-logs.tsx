@@ -36,13 +36,16 @@ export default function CounterLogs({ logs }: CounterLogsProps) {
                 ? "decrement"
                 : "no change";
 
+            const isCustomValue = Math.abs(log.value) !== 1;
+
             return (
               <div key={log.id} className="px-6 py-4">
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3">
                       <div className="font-medium text-gray-900">
-                        Change: {log.value > 0 ? "+" : ""}
+                        {isCustomValue ? "Custom change:" : "Change:"}{" "}
+                        {log.value > 0 ? "+" : ""}
                         {log.value}
                       </div>
                       <span
@@ -54,7 +57,7 @@ export default function CounterLogs({ logs }: CounterLogsProps) {
                             : "bg-gray-100 text-gray-800"
                         }`}
                       >
-                        {changeType}
+                        {isCustomValue ? "custom" : changeType}
                       </span>
                     </div>
                     <div className="text-sm text-gray-500 mt-1">

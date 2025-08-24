@@ -6,6 +6,7 @@ import {
   incrementCounter,
   decrementCounter,
   deleteCounter,
+  addCustomValue,
 } from "@/components/counter-actions";
 
 interface Counter {
@@ -111,6 +112,37 @@ export default function CountersClient({
     }
   }
 
+  async function handleCustomValue(counterId: string, value: number) {
+    // Check if the result would be negative
+    const currentCounter = counters.find((c) => c.id === counterId);
+    if (!currentCounter || currentCounter.value + value < 0) {
+      return;
+    }
+
+    // Optimistic update
+    setCounters((prev) =>
+      prev.map((c) =>
+        c.id === counterId ? { ...c, value: c.value + value } : c
+      )
+    );
+
+    try {
+      const formData = new FormData();
+      formData.append("id", counterId);
+      formData.append("value", value.toString());
+      await addCustomValue(formData);
+      // No need to sync since we already updated optimistically
+    } catch (error) {
+      // Rollback on failure
+      setCounters((prev) =>
+        prev.map((c) =>
+          c.id === counterId ? { ...c, value: c.value - value } : c
+        )
+      );
+      console.error("Failed to add custom value:", error);
+    }
+  }
+
   async function handleDelete(counterId: string) {
     // Optimistic delete
     setCounters((prev) => prev.filter((c) => c.id !== counterId));
@@ -144,7 +176,7 @@ export default function CountersClient({
         </form>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="space-y-4">
         {counters.map((counter) => (
           <CounterCard
             key={counter.id}
@@ -152,6 +184,7 @@ export default function CountersClient({
             onIncrement={() => handleIncrement(counter.id)}
             onDecrement={() => handleDecrement(counter.id)}
             onDelete={() => handleDelete(counter.id)}
+            onCustomValue={(value) => handleCustomValue(counter.id, value)}
           />
         ))}
       </div>

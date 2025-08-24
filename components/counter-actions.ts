@@ -147,3 +147,59 @@ export async function deleteCounter(formData: FormData) {
       and(eq(countersTable.id, id), eq(countersTable.userId, session.user.id))
     );
 }
+
+export async function addCustomValue(formData: FormData) {
+  const session = await auth();
+  if (!session?.user?.id) {
+    throw new Error("Not authenticated");
+  }
+
+  const id = formData.get("id");
+  if (typeof id !== "string" || id.length === 0) {
+    throw new Error("Counter id is required");
+  }
+
+  const value = formData.get("value");
+  if (typeof value !== "string" || value.length === 0) {
+    throw new Error("Value is required");
+  }
+
+  const numericValue = parseInt(value);
+  if (isNaN(numericValue)) {
+    throw new Error("Value must be a valid number");
+  }
+
+  // First, get the current counter data
+  const [currentCounter] = await db
+    .select()
+    .from(countersTable)
+    .where(
+      and(eq(countersTable.id, id), eq(countersTable.userId, session.user.id))
+    );
+
+  if (!currentCounter) {
+    throw new Error("Counter not found");
+  }
+
+  // Check if the result would be negative
+  if (currentCounter.value + numericValue < 0) {
+    throw new Error("Counter value cannot go below 0");
+  }
+
+  // Update the counter
+  await db
+    .update(countersTable)
+    .set({ value: sql`${countersTable.value} + ${numericValue}` })
+    .where(
+      and(eq(countersTable.id, id), eq(countersTable.userId, session.user.id))
+    );
+
+  // Create a log entry with the change amount
+  await db.insert(counterItemsTable).values({
+    id: crypto.randomUUID(),
+    counterId: id,
+    name: currentCounter.name,
+    value: numericValue, // Log the change amount
+    userId: session.user.id,
+  });
+}
