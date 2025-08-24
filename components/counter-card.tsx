@@ -19,6 +19,8 @@ export default function CounterCard({
   onDecrement,
   onDelete,
 }: CounterCardProps) {
+  const isDecrementDisabled = counter.value <= 0;
+
   return (
     <div className="bg-white p-4 rounded-md border shadow-sm">
       <div className="flex items-center justify-between mb-2">
@@ -33,7 +35,17 @@ export default function CounterCard({
           </button>
           <button
             onClick={onDecrement}
-            className="w-8 h-8 rounded-full bg-gray-600 text-white flex items-center justify-center hover:bg-gray-700 transition-colors"
+            disabled={isDecrementDisabled}
+            title={
+              isDecrementDisabled
+                ? "Counter cannot go below 0"
+                : `Decrement ${counter.name}`
+            }
+            className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+              isDecrementDisabled
+                ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                : "bg-gray-600 text-white hover:bg-gray-700"
+            }`}
             aria-label={`Decrement ${counter.name}`}
           >
             −

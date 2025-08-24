@@ -74,12 +74,12 @@ export async function incrementCounter(formData: FormData) {
       and(eq(countersTable.id, id), eq(countersTable.userId, session.user.id))
     );
 
-  // Create a log entry
+  // Create a log entry with the change amount (+1)
   await db.insert(counterItemsTable).values({
     id: crypto.randomUUID(),
     counterId: id,
     name: currentCounter.name,
-    value: currentCounter.value + 1,
+    value: 1, // Log the change amount, not the total
     userId: session.user.id,
   });
 }
@@ -107,6 +107,11 @@ export async function decrementCounter(formData: FormData) {
     throw new Error("Counter not found");
   }
 
+  // Check if counter value is already 0
+  if (currentCounter.value <= 0) {
+    throw new Error("Counter value cannot go below 0");
+  }
+
   // Update the counter
   await db
     .update(countersTable)
@@ -115,12 +120,12 @@ export async function decrementCounter(formData: FormData) {
       and(eq(countersTable.id, id), eq(countersTable.userId, session.user.id))
     );
 
-  // Create a log entry
+  // Create a log entry with the change amount (-1)
   await db.insert(counterItemsTable).values({
     id: crypto.randomUUID(),
     counterId: id,
     name: currentCounter.name,
-    value: currentCounter.value - 1,
+    value: -1, // Log the change amount, not the total
     userId: session.user.id,
   });
 }

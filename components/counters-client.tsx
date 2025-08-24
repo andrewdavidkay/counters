@@ -85,6 +85,13 @@ export default function CountersClient({
   }
 
   async function handleDecrement(counterId: string) {
+    // Check if counter is already at 0
+    const currentCounter = counters.find((c) => c.id === counterId);
+    if (!currentCounter || currentCounter.value <= 0) {
+      // Don't allow decrementing below 0
+      return;
+    }
+
     // Optimistic decrement
     setCounters((prev) =>
       prev.map((c) => (c.id === counterId ? { ...c, value: c.value - 1 } : c))

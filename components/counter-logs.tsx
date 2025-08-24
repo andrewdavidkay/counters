@@ -5,7 +5,7 @@ interface CounterLog {
   counterId: string;
   userId: string;
   name: string;
-  value: number;
+  value: number; // This is now the change amount, not the total
   createdAt: Date;
   updatedAt: Date;
 }
@@ -16,19 +16,6 @@ interface CounterLogsProps {
 }
 
 export default function CounterLogs({ logs, currentValue }: CounterLogsProps) {
-  // Calculate the change for each log entry
-  const logsWithChanges = logs.map((log, index) => {
-    const previousLog = logs[index + 1]; // Next log in the array (since it's ordered by desc)
-    const change = previousLog ? log.value - previousLog.value : log.value;
-
-    return {
-      ...log,
-      change,
-      changeType:
-        change > 0 ? "increment" : change < 0 ? "decrement" : "no change",
-    };
-  });
-
   return (
     <div className="bg-white rounded-lg border border-slate-300 overflow-hidden">
       <div className="px-6 py-4 border-b border-slate-200">
@@ -42,35 +29,46 @@ export default function CounterLogs({ logs, currentValue }: CounterLogsProps) {
             <p className="text-gray-500">No activity logged yet.</p>
           </div>
         ) : (
-          logsWithChanges.map((log, index) => (
-            <div key={log.id} className="px-6 py-4">
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3">
-                    <div className="font-medium text-gray-900">
-                      Value: {log.value}
-                    </div>
-                    {log.change !== 0 && (
+          logs.map((log) => {
+            const changeType =
+              log.value > 0
+                ? "increment"
+                : log.value < 0
+                ? "decrement"
+                : "no change";
+
+            return (
+              <div key={log.id} className="px-6 py-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3">
+                      <div className="font-medium text-gray-900">
+                        Change: {log.value > 0 ? "+" : ""}
+                        {log.value}
+                      </div>
                       <span
                         className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                          log.changeType === "increment"
+                          changeType === "increment"
                             ? "bg-green-100 text-green-800"
-                            : "bg-red-100 text-red-800"
+                            : changeType === "decrement"
+                            ? "bg-red-100 text-red-800"
+                            : "bg-gray-100 text-gray-800"
                         }`}
                       >
-                        {log.changeType === "increment" ? "+" : ""}
-                        {log.change}
+                        {changeType}
                       </span>
-                    )}
+                    </div>
+                    <div className="text-sm text-gray-500 mt-1">
+                      {new Date(log.createdAt).toLocaleString()}
+                    </div>
                   </div>
-                  <div className="text-sm text-gray-500 mt-1">
-                    {new Date(log.createdAt).toLocaleString()}
+                  <div className="text-sm text-gray-400">
+                    #{log.id.slice(-8)}
                   </div>
                 </div>
-                <div className="text-sm text-gray-400">#{log.id.slice(-8)}</div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
     </div>
