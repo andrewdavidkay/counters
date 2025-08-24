@@ -203,3 +203,47 @@ export async function addCustomValue(formData: FormData) {
     userId: session.user.id,
   });
 }
+
+export async function updateCounterName(formData: FormData) {
+  const session = await auth();
+  if (!session?.user?.id) {
+    throw new Error("Not authenticated");
+  }
+
+  const id = formData.get("id");
+  if (typeof id !== "string" || id.length === 0) {
+    throw new Error("Counter id is required");
+  }
+
+  const name = formData.get("name");
+  if (typeof name !== "string" || name.trim().length === 0) {
+    throw new Error("Counter name is required");
+  }
+
+  const trimmedName = name.trim();
+
+  // Check if counter exists and user owns it
+  const [existingCounter] = await db
+    .select()
+    .from(countersTable)
+    .where(
+      and(eq(countersTable.id, id), eq(countersTable.userId, session.user.id))
+    );
+
+  if (!existingCounter) {
+    throw new Error("Counter not found");
+  }
+
+  // Check if name is the same
+  if (existingCounter.name === trimmedName) {
+    throw new Error("Counter name is already the same");
+  }
+
+  // Update the counter name
+  await db
+    .update(countersTable)
+    .set({ name: trimmedName })
+    .where(
+      and(eq(countersTable.id, id), eq(countersTable.userId, session.user.id))
+    );
+}

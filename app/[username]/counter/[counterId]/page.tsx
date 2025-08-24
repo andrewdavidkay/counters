@@ -5,6 +5,7 @@ import db from "@/db";
 import { usersTable, countersTable, counterItemsTable } from "@/db/schema";
 import { eq, and, desc } from "drizzle-orm";
 import CounterLogs from "@/components/counter-logs";
+import { auth } from "@/auth";
 
 interface CounterLogsPageProps {
   params: Promise<{
@@ -56,6 +57,7 @@ export default async function CounterLogsPage({
   params,
 }: CounterLogsPageProps) {
   const { username, counterId } = await params;
+  const session = await auth();
 
   // Get user by username
   const [user] = await db
@@ -86,6 +88,8 @@ export default async function CounterLogsPage({
     .where(eq(counterItemsTable.counterId, counterId))
     .orderBy(desc(counterItemsTable.createdAt));
 
+  const isOwner = session?.user?.id === counter.userId;
+
   return (
     <div className="max-w-4xl mx-auto p-6">
       {/* Header with back button */}
@@ -94,22 +98,32 @@ export default async function CounterLogsPage({
           href={`/${username}`}
           className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-4"
         >
-          ← Back to {user.name || user.username}
-          {"'s"} profile
+          ← Back to {user.name || user.username}'s profile
         </Link>
 
-        <div className="flex items-center gap-4 mb-6">
-          <img
-            src={user.image ?? "/default-avatar.png"}
-            alt={`${user.name || user.username}'s avatar`}
-            className="w-12 h-12 rounded-full"
-          />
-          <div>
-            <h1 className="text-2xl font-bold">{counter.name}</h1>
-            <p className="text-gray-600">
-              Counter by {user.name || user.username} (@{user.username})
-            </p>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-4">
+            <img
+              src={user.image ?? "/default-avatar.png"}
+              alt={`${user.name || user.username}'s avatar`}
+              className="w-12 h-12 rounded-full"
+            />
+            <div>
+              <h1 className="text-2xl font-bold">{counter.name}</h1>
+              <p className="text-gray-600">
+                Counter by {user.name || user.username} (@{user.username})
+              </p>
+            </div>
           </div>
+
+          {isOwner && (
+            <Link
+              href={`/${username}/counter/${counterId}/edit`}
+              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+            >
+              Edit Counter
+            </Link>
+          )}
         </div>
 
         {/* Current counter value */}
