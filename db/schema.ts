@@ -65,3 +65,20 @@ export const countersTable = pgTable("counter", {
     .defaultNow()
     .$onUpdate(() => new Date()),
 });
+
+export const counterItemsTable = pgTable("counterItem", {
+  id: text("id").primaryKey(),
+  counterId: text("counterId")
+    .notNull()
+    .references(() => countersTable.id, { onDelete: "cascade" }),
+  userId: text("userId")
+    .notNull()
+    .references(() => usersTable.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  value: integer("value").notNull().default(0),
+  createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp("updatedAt", { mode: "date" })
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
