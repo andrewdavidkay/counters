@@ -12,10 +12,9 @@ interface CounterLog {
 
 interface CounterLogsProps {
   logs: CounterLog[];
-  currentValue: number;
 }
 
-export default function CounterLogs({ logs, currentValue }: CounterLogsProps) {
+export default function CounterLogs({ logs }: CounterLogsProps) {
   return (
     <div className="bg-white rounded-lg border border-slate-300 overflow-hidden">
       <div className="px-6 py-4 border-b border-slate-200">
