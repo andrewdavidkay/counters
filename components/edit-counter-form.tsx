@@ -159,7 +159,7 @@ export default function EditCounterForm({
           ) : (
             <div className="space-y-3">
               <p className="text-sm text-red-600 font-medium">
-                Are you sure you want to delete "{counter.name}"?
+                Are you sure you want to delete &quot;{counter.name}&quot;?
               </p>
               <div className="flex gap-3">
                 <button

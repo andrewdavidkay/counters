@@ -98,7 +98,8 @@ export default async function CounterLogsPage({
           href={`/${username}`}
           className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-4"
         >
-          ← Back to {user.name || user.username}'s profile
+          ← Back to {user.name || user.username}
+          {"'s"} profile
         </Link>
 
         <div className="flex items-center justify-between mb-6">
