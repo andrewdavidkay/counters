@@ -12,6 +12,7 @@
   "dependencies": {
     "@auth/drizzle-adapter": "^1.9.1",
     "@neondatabase/serverless": "^1.0.1",
+    "@radix-ui/react-dialog": "^1.1.15",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.44.2",
     "next": "15.3.3",

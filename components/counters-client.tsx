@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import CounterCard from "@/components/counter-card";
 import {
   incrementCounter,
@@ -21,48 +21,7 @@ interface CountersClientProps {
 export default function CountersClient({
   initialCounters,
 }: CountersClientProps) {
-  const formRef = useRef<HTMLFormElement>(null);
   const [counters, setCounters] = useState<Counter[]>(initialCounters);
-
-  async function handleCreate(formData: FormData) {
-    const name = String(formData.get("name") ?? "").trim();
-    if (!name) return;
-
-    const optimisticId =
-      typeof crypto !== "undefined" && "randomUUID" in crypto
-        ? crypto.randomUUID()
-        : `optimistic-${Date.now()}`;
-
-    const optimisticCounter: Counter = {
-      id: optimisticId,
-      name,
-      value: 0,
-    };
-
-    // Optimistic add
-    setCounters((prev) => [optimisticCounter, ...prev]);
-
-    try {
-      const res = await fetch("/api/counters/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name }),
-      });
-      if (!res.ok) throw new Error("Failed to create");
-      const data = await res.json();
-      const realCounter: Counter = data.counter;
-      // Replace optimistic with real
-      setCounters((prev) =>
-        prev.map((c) => (c.id === optimisticId ? realCounter : c))
-      );
-    } catch (error) {
-      // Revert optimistic add on failure
-      setCounters((prev) => prev.filter((c) => c.id !== optimisticId));
-      console.error("Failed to create counter:", error);
-    }
-
-    formRef.current?.reset();
-  }
 
   async function handleIncrement(counterId: string) {
     // Optimistic increment
@@ -144,20 +103,6 @@ export default function CountersClient({
 
   return (
     <div>
-      <div className="mb-6 flex justify-center">
-        <form ref={formRef} action={handleCreate} className="flex gap-2">
-          <input
-            type="text"
-            name="name"
-            placeholder="Counter Name"
-            className="border rounded-md px-3 py-2"
-          />
-          <button className="bg-blue-500 text-white px-3 py-2 rounded-md">
-            Create Counter
-          </button>
-        </form>
-      </div>
-
       <div className="space-y-4">
         {counters.map((counter) => (
           <CounterCard
