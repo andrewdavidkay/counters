@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import db from "@/db";
 import { usersTable, countersTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
@@ -44,23 +45,26 @@ export default async function Profile({ params }: ProfilePageProps) {
         </div>
       </div>
 
-      <div className=" overflow-hidden">
+      <div className="overflow-hidden">
         {counters.map((counter) => (
-          <div
+          <Link
             key={counter.id}
-            className="flex items-center justify-between p-4 mb-2 bg-white rounded-lg border border-slate-300"
+            href={`/${username}/counter/${counter.id}`}
+            className="block"
           >
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold text-gray-900">
-                {counter.name}
-              </h3>
+            <div className="flex items-center justify-between p-4 mb-2 bg-white rounded-lg border border-slate-300 hover:border-blue-300 hover:shadow-md transition-all cursor-pointer">
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  {counter.name}
+                </h3>
+              </div>
+              <div className="ml-4 flex items-center gap-2">
+                <span className="text-2xl font-bold text-blue-600">
+                  {counter.value}
+                </span>
+              </div>
             </div>
-            <div className="ml-4">
-              <span className="text-2xl font-bold text-blue-600">
-                {counter.value}
-              </span>
-            </div>
-          </div>
+          </Link>
         ))}
       </div>
 
