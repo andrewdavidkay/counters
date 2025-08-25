@@ -18,7 +18,7 @@ export default function CounterLogs({ logs }: CounterLogsProps) {
   return (
     <div className="bg-white rounded-lg border border-slate-300 overflow-hidden">
       <div className="px-6 py-4 border-b border-slate-200">
-        <h2 className="text-xl font-semibold">Activity Log</h2>
+        <h2 className="text-xl font-semibold">Activity</h2>
         <p className="text-gray-600 text-sm">{logs.length} log entries</p>
       </div>
 
