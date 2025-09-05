@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { Metadata } from "next";
+import { ArrowLeft } from "lucide-react";
 import db from "@/db";
 import { usersTable, countersTable } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
@@ -97,9 +98,9 @@ export default async function EditCounterPage({
       <div className="mb-6">
         <Link
           href={`/${username}/counter/${counterId}`}
-          className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-4"
+          className="inline-flex items-center justify-center w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-full mb-4 transition-all duration-200 hover:translate-x-[-2px] transform"
         >
-          ← Back to counter
+          <ArrowLeft className="h-5 w-5 text-gray-600 transition-transform duration-200" />
         </Link>
 
         <div className="flex items-center gap-4 mb-6">
